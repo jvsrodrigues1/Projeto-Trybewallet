@@ -23,7 +23,7 @@ class Header extends Component {
 
 Header.propTypes = {
   email: PropTypes.objectOf(PropTypes.string).isRequired,
-  expenses: PropTypes.arrayOf(PropTypes.object),
+  expenses: PropTypes.arrayOf(PropTypes.number),
 };
 
 Header.defaultProps = {
