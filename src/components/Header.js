@@ -20,3 +20,19 @@ class Header extends Component {
     );
   }
 }
+
+Header.propTypes = {
+  email: PropTypes.objectOf(PropTypes.string).isRequired,
+  expenses: PropTypes.arrayOf(PropTypes.number),
+};
+
+Header.defaultProps = {
+  expenses: [],
+};
+
+const mapStateToProps = (state) => ({
+  email: state.user.email,
+  expenses: state.wallet.expenses,
+});
+
+export default connect(mapStateToProps)(Header);
