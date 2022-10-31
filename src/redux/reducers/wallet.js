@@ -1,46 +1,50 @@
 // Esse reducer será responsável por tratar o todas as informações relacionadas as despesas
+import {
+  GET_EXPENSES,
+  GET_CURRENCY,
+  GET_CURRENCY_SUCCESS,
+  GET_CURRENCY_ERROR,
+  REMOVE_EXPENSES,
+  RENDER_CCOINS,
+  EXPENSE_SETTING,
+} from '../actions/index';
+
 const INITIAL_STATE = {
-  currencies: [],
+  currencies: {},
   expenses: [],
-  isLoading: false,
-  isEditing: false,
-  selectedExpense: {},
+  coins: [],
 };
 
 const walletReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-  case 'REQUEST_CURRENCIES':
-    return { ...state, isLoading: true };
-  case 'RESPONSE_CURRENCIES':
+  case GET_CURRENCY:
     return { ...state,
-      isLoading: false,
-      currencies: Object.keys(action.payload),
     };
-  case 'SAVE_EXPENSES':
+  case RENDER_CCOINS:
+    return { ...state,
+      coins: action.payload,
+    };
+  case GET_EXPENSES:
     return { ...state,
       expenses: [...state.expenses, action.payload],
     };
-  case 'REMOVE_EXPENSE':
-    return {
-      ...state,
-      expenses: state.expenses.filter((expense) => expense.id !== action.payload),
+  case GET_CURRENCY_SUCCESS:
+    return { ...state,
+      currencies: [action.payload],
     };
-  case 'SET_EDITING':
-    return {
-      ...state,
-      isEditing: true,
-      selectedExpense: action.payload,
+  case GET_CURRENCY_ERROR:
+    return { ...state,
+      error: action.payload.error,
     };
-  case 'EDIT_EXPENSE':
-    return {
-      ...state,
-      isEditing: false,
-      expenses: [...action.payload],
-    };
+  case REMOVE_EXPENSES:
+    return { ...state,
+      expenses: state.expenses.filter((expense) => expense.id !== action.payload.id) };
+  case EXPENSE_SETTING:
+    return { ...state,
+      setexpenses: state.expenses.filter((expense) => expense.id !== action.payload.id) };
 
   default:
     return state;
   }
 };
-
 export default walletReducer;
