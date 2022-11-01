@@ -1,6 +1,6 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import App from '../App';
 
 import { renderWithRouterAndRedux } from './helpers/renderWith';
@@ -81,5 +81,31 @@ describe('1 - Crie uma página inicial de login com os seguintes campos e caract
     userEvent.type(email, VALID_EMAIL);
     userEvent.type(senha, VALID_PASSWORD);
     expect(button).toBeEnabled();
+  });
+
+  test('Verifica se o estado da aplicacao esta sendo salvo corretamente', () => {
+    const { store } = renderWithRouterAndRedux(<App />);
+    const email = screen.getByTestId(EMAIL_INPUT_TEST_ID);
+    const senha = screen.getByTestId(PASSWORD_INPUT_TEST_ID);
+    const button = screen.getByText(/Entrar/i);
+
+    userEvent.type(email, VALID_EMAIL);
+    userEvent.type(senha, VALID_PASSWORD);
+    fireEvent.click(button);
+
+    expect(store.getState().user.email).toBe(VALID_EMAIL);
+  });
+
+  test('Verifica a mudanca para a  \'/carteira\' após o clique no botão.', () => {
+    const { history } = renderWithRouterAndRedux(<App />);
+    const email = screen.getByTestId(EMAIL_INPUT_TEST_ID);
+    const senha = screen.getByTestId(PASSWORD_INPUT_TEST_ID);
+    const button = screen.getByText(/Entrar/i);
+
+    userEvent.type(email, VALID_EMAIL);
+    userEvent.type(senha, VALID_PASSWORD);
+    fireEvent.click(button);
+
+    expect(history.location.pathname).toBe('/carteira');
   });
 });
