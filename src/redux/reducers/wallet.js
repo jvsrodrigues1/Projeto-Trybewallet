@@ -1,50 +1,44 @@
-// Esse reducer será responsável por tratar o todas as informações relacionadas as despesas
-import {
-  GET_EXPENSES,
-  GET_CURRENCY,
-  GET_CURRENCY_SUCCESS,
-  GET_CURRENCY_ERROR,
-  REMOVE_EXPENSES,
-  RENDER_CCOINS,
-  EXPENSE_SETTING,
-} from '../actions/index';
+import { ADD_EXPENSE, CURRENCY, ERASE_EXPENSE, ID_EDIT, SEND_EDIT } from '../actions';
 
 const INITIAL_STATE = {
-  currencies: {},
+  currencies: [],
   expenses: [],
-  coins: [],
+  editor: false,
+  idToEdit: 0,
 };
 
-const walletReducer = (state = INITIAL_STATE, action) => {
+const wallet = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-  case GET_CURRENCY:
-    return { ...state,
+  case CURRENCY:
+    return {
+      ...state,
+      currencies: action.payload,
     };
-  case RENDER_CCOINS:
-    return { ...state,
-      coins: action.payload,
-    };
-  case GET_EXPENSES:
-    return { ...state,
+  case ADD_EXPENSE:
+    return {
+      ...state,
       expenses: [...state.expenses, action.payload],
     };
-  case GET_CURRENCY_SUCCESS:
-    return { ...state,
-      currencies: [action.payload],
+  case ERASE_EXPENSE:
+    return {
+      ...state,
+      expenses: action.payload,
     };
-  case GET_CURRENCY_ERROR:
-    return { ...state,
-      error: action.payload.error,
+  case ID_EDIT:
+    return {
+      ...state,
+      idToEdit: action.payload,
+      editor: true,
     };
-  case REMOVE_EXPENSES:
-    return { ...state,
-      expenses: state.expenses.filter((expense) => expense.id !== action.payload.id) };
-  case EXPENSE_SETTING:
-    return { ...state,
-      setexpenses: state.expenses.filter((expense) => expense.id !== action.payload.id) };
-
+  case SEND_EDIT:
+    return {
+      ...state,
+      expenses: action.payload,
+      editor: false,
+    };
   default:
     return state;
   }
 };
-export default walletReducer;
+
+export default wallet;
