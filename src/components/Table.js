@@ -34,4 +34,59 @@ class Table extends Component {
           <th>Editar/Excluir</th>
         </tr>
         <tbody>
-    
+          {expenses.map((expense) => {
+            const conversion = Number(expense.exchangeRates[expense.currency].ask)
+            * Number(expense.value);
+            const fixedConversion = Number(conversion.toFixed(2));
+            const fixedValue = Number(expense.value).toFixed(2);
+            const fixedExchange = Number(expense.exchangeRates[expense.currency].ask)
+              .toFixed(2);
+            return (
+              <tr key={ uuid() }>
+                <td>{expense.description}</td>
+                <td>{expense.tag}</td>
+                <td>{expense.method}</td>
+                <td>{fixedValue}</td>
+                <td>{expense.exchangeRates[expense.currency].name}</td>
+                <td>{fixedExchange}</td>
+                <td>{fixedConversion}</td>
+                <td>Real</td>
+                <td>
+                  <button
+                    type="button"
+                    data-testid="edit-btn"
+                    onClick={ () => this.handleEditBtn(expense.id) }
+                  >
+                    Editar
+                  </button>
+                  <button
+                    type="button"
+                    data-testid="delete-btn"
+                    onClick={ () => this.handleDeleteBtn(expense.id) }
+                  >
+                    Excluir
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    );
+  }
+}
+
+const mapStateToProps = (state) => ({
+  expenses: state.wallet.expenses,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  deleteExpense: (newExpensesArray) => dispatch(eraseExpense(newExpensesArray)),
+  editingId: (id) => dispatch(idEdit(id)),
+});
+
+Table.propTypes = {
+  expenses: PropTypes.array,
+}.isRequired;
+
+export default connect(mapStateToProps, mapDispatchToProps)(Table);
